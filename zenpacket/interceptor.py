@@ -1,4 +1,3 @@
-from zenpacket.packet import Packet
 import platform
 import subprocess
 
@@ -9,8 +8,7 @@ class Interceptor(object):
     and post-conditions of the template and forwarding the modified package
     to the target machine."""
 
-    def __init__(self, template,
-                 iptables_rule="iptables -A FORWARD -j NFQUEUE --queue-num 1",
+    def __init__(self, iptables_rule="iptables -A FORWARD -j NFQUEUE --queue-num 1",
                  ip6tables_rule="ip6tables -A FORWARD -j NFQUEUE --queue-num 1"):
         """Initialization method of the `Interceptor` class.
 
@@ -27,16 +25,9 @@ class Interceptor(object):
         """
         self.iptables_rule = iptables_rule
         self.ip6tables_rule = ip6tables_rule
-        self.packet = Packet(template)
-        self._preconditions = [template.get_precondition(pc)
-                               for pc in template.precondition_names()]
-        self._executions = [template.get_execution(ex)
-                            for ex in template.execution_names()]
-        self._postconditions = [template.get_postcondition(pr)
-                                for pr in template.postcondition_names()]
-        self._functions = [self._preconditions,
-                           self._executions,
-                           self._postconditions]
+        self.packet = None
+        self._conditions = []
+        self._functions = [self._conditions]
 
     def set_iptables_rules(self):
         subprocess.check_output(self.iptables_rule, shell=True, stderr=subprocess.STDOUT)
@@ -58,7 +49,7 @@ class Interceptor(object):
 
         """
         # Initialization of the Packet with the new raw bytes
-        self.packet.raw = packet.get_payload()
+        self.packet = packet.get_payload()
         # Executing the preconditions, executions and postconditions
         for functions in self._functions:
             for condition in functions:
@@ -67,7 +58,7 @@ class Interceptor(object):
                 # packet must be forwarded
                 if not pkt:
                     if self.packet:
-                        packet.set_payload(self.packet.raw)
+                        packet.set_payload(self.packet)
                     packet.accept()
                     return
                 # If the precondition returns the packet, we assign it to the
@@ -75,7 +66,7 @@ class Interceptor(object):
                 self.packet = pkt
         # If all the conditions are met, we assign the payload of the modified
         # packet to the nfqueue packet and forward it
-        packet.set_payload(self.packet.raw)
+        packet.set_payload(self.packet)
         packet.accept()
 
     def windows_modify(self, packet, w, pydivert):
@@ -92,7 +83,7 @@ class Interceptor(object):
 
         """
         # Initialization of the Packet with the new raw bytes
-        self.packet.raw = packet.raw.tobytes()
+        self.packet = packet.get_payload()
         # Executing the preconditions, executions and postconditions
         for functions in self._functions:
             for condition in functions:
