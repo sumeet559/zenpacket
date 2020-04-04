@@ -1,7 +1,7 @@
 import platform
 import subprocess
 import zenpacket.banner as banner
-from zenpacket.conditions.executions import exec
+from zenpacket.conditions import *
 
 class Interceptor(object):
     """This is the class responsible for intercepting packages in real time,
@@ -27,7 +27,7 @@ class Interceptor(object):
         self.iptables_rule = https_ingress_rule
         self.ip6tables_rule = https_egress_rule
         self.packet = None
-        self._functions = [exec.rec_tcpip]
+        self._functions = []
 
     def set_iptables_rules(self):
         subprocess.check_output(self.iptables_rule, shell=True, stderr=subprocess.STDOUT)
