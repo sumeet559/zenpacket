@@ -123,10 +123,11 @@ class Interceptor(object):
             # The iptables rule queue number by default is 1
             nfqueue.bind(1, self.linux_modify)
             try:
-                self.set_iptables_rules()
+                #self.set_iptables_rules()
                 print("[*]1 Waiting for packets...\n\n(Press Ctrl-C to exit)\n")
                 nfqueue.run()
             except KeyboardInterrupt:
-                self.clean_iptables()
+                #self.clean_iptables()
+            nfqueue.unbind()
         else:
             print("Sorry. Platform not supported!\n")
