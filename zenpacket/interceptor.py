@@ -128,6 +128,6 @@ class Interceptor(object):
                 nfqueue.run()
             except KeyboardInterrupt:
                 #self.clean_iptables()
-            nfqueue.unbind()
+                nfqueue.unbind()
         else:
             print("Sorry. Platform not supported!\n")
