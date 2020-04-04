@@ -1,6 +1,7 @@
+from scapy.all import IP
+
 def rec_tcpip(packet):
     print('H1')
-    from scapy.all import IP
     print('H11')
     pkt = IP(packet.get_payload())
     print('H2')
