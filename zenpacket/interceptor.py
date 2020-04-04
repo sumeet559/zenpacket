@@ -9,10 +9,10 @@ class Interceptor(object):
     and post-conditions of the template and forwarding the modified package
     to the target machine."""
 
-    def __init__(self, tcp_ingress_rules="iptables -A INPUT -p tcp --dport 20:3389 -m conntrack --ctstate NEW,ESTABLISHED -j NFQUEUE --queue-num 2",
-        tcp_egress_rules="iptables -A OUTPUT -p tcp --dport 20:3389 -m conntrack --ctstate ESTABLISHED -j NFQUEUE --queue-num 2",
+    def __init__(self, tcp_ingress_rules="iptables -A INPUT -p tcp -m multiport --dports 20,21,23,25,53,80,110,119,135,139,161,162,389,443,179 -m conntrack --ctstate NEW,ESTABLISHED -j NFQUEUE --queue-num 2",
+        tcp_egress_rules="iptables -A OUTPUT -p tcp --dport 20,21,23,25,53,80,110,119,135,139,161,162,389,443,179 -m conntrack --ctstate ESTABLISHED -j NFQUEUE --queue-num 2",
         udp_ingress_rules="iptables -A INPUT -p udp --dport 20:65535 -m conntrack --ctstate NEW,ESTABLISHED -j NFQUEUE --queue-num 2",
-        udp_egress_rules="iptables -A OUTPUT -p udp --dport 20:65535 -m conntrack --ctstate NEW,ESTABLISHED -j NFQUEUE --queue-num 2"):
+        udp_egress_rules="iptables -A OUTPUT -p udp --dport 20:65535 -m conntrack --ctstate ESTABLISHED -j NFQUEUE --queue-num 2"):
 
         """Initialization method of the `Interceptor` class.
 
