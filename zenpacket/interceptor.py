@@ -9,8 +9,11 @@ class Interceptor(object):
     and post-conditions of the template and forwarding the modified package
     to the target machine."""
 
-    def __init__(self, ingress_rules="iptables -A INPUT -p tcp --dport 20:3389 -m conntrack --ctstate NEW,ESTABLISHED -j NFQUEUE --queue-num 2",
-        egress_rules="iptables -A OUTPUT -p tcp --dport 20:3389 -m conntrack --ctstate ESTABLISHED -j NFQUEUE --queue-num 2"):
+    def __init__(self, tcp_ingress_rules="iptables -A INPUT -p tcp --dport 20:3389 -m conntrack --ctstate NEW,ESTABLISHED -j NFQUEUE --queue-num 2",
+        tcp_egress_rules="iptables -A OUTPUT -p tcp --dport 20:3389 -m conntrack --ctstate ESTABLISHED -j NFQUEUE --queue-num 2",
+        udp_ingress_rules="iptables -A INPUT -p udp --dport 20:65535 -m conntrack --ctstate NEW,ESTABLISHED -j NFQUEUE --queue-num 2",
+        udp_egress_rules="iptables -A OUTPUT -p udp --dport 20:65535 -m conntrack --ctstate NEW,ESTABLISHED -j NFQUEUE --queue-num 2"):
+
         """Initialization method of the `Interceptor` class.
 
         Parameters
@@ -24,14 +27,19 @@ class Interceptor(object):
             Iptables rule for intercepting packets for ipv6.
 
         """
-        self.iptables_rule = ingress_rules
-        self.ip6tables_rule = egress_rules
+        self.tcp_ingress_rules = tcp_ingress_rules
+        self.tcp_egress_rules = tcp_egress_rules
+        self.udp_ingress_rules = udp_ingress_rules
+        self.udp_egress_rules = udp_egress_rules
+
         self.packet = None
         self._functions = []
 
     def set_iptables_rules(self):
-        #subprocess.check_output(self.iptables_rule, shell=True, stderr=subprocess.STDOUT)
-        subprocess.check_output(self.ip6tables_rule, shell=True, stderr=subprocess.STDOUT)
+        subprocess.check_output(self.tcp_ingress_rules, shell=True, stderr=subprocess.STDOUT)
+        subprocess.check_output(self.tcp_egress_rules, shell=True, stderr=subprocess.STDOUT)
+        subprocess.check_output(self.udp_ingress_rules, shell=True, stderr=subprocess.STDOUT)
+        subprocess.check_output(self.udp_egress_rules, shell=True, stderr=subprocess.STDOUT)
 
     def clean_iptables(self):
         subprocess.check_output("iptables -F", shell=True, stderr=subprocess.STDOUT)
