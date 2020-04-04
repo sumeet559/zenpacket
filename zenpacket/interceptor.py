@@ -1,6 +1,6 @@
 import platform
 import subprocess
-import zenpacket.banner
+import zenpacket.banner as banner
 
 
 class Interceptor(object):
