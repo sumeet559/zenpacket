@@ -68,6 +68,7 @@ class Interceptor(object):
                 self.packet = pkt
         # If all the conditions are met, we assign the payload of the modified
         # packet to the nfqueue packet and forward it
+        self.packet.show2()
         packet.set_payload(utils.raw_packet(self.packet))
         packet.accept()
 
