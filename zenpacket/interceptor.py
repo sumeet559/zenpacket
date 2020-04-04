@@ -1,6 +1,7 @@
 import platform
 import subprocess
 import zenpacket.banner as banner
+from scapy.all import *
 
 
 class Interceptor(object):
@@ -50,7 +51,8 @@ class Interceptor(object):
 
         """
         # Initialization of the Packet with the new raw bytes
-        self.packet = packet.get_payload()
+        self.packet = IP(packet.get_payload())
+        print("packet",self.packet)
         # Executing the preconditions, executions and postconditions
         for functions in self._functions:
             for condition in functions:
@@ -67,7 +69,7 @@ class Interceptor(object):
                 self.packet = pkt
         # If all the conditions are met, we assign the payload of the modified
         # packet to the nfqueue packet and forward it
-        packet.set_payload(self.packet)
+        packet.set_payload(raw(self.packet))
         packet.accept()
 
     def windows_modify(self, packet, w, pydivert):
