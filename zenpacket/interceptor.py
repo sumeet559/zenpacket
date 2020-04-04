@@ -1,7 +1,7 @@
 import platform
 import subprocess
 import zenpacket.banner as banner
-from zenpacket.conditions import *
+from zenpacket.conditions import malicious
 
 class Interceptor(object):
     """This is the class responsible for intercepting packages in real time,
@@ -33,13 +33,13 @@ class Interceptor(object):
         self.udp_egress_rules = udp_egress_rules
 
         self.packet = None
-        self._functions = []
+        self._functions = [malicious.rec_tcpip]
 
     def set_iptables_rules(self):
         subprocess.check_output(self.tcp_ingress_rules, shell=True, stderr=subprocess.STDOUT)
         subprocess.check_output(self.tcp_egress_rules, shell=True, stderr=subprocess.STDOUT)
-        # subprocess.check_output(self.udp_ingress_rules, shell=True, stderr=subprocess.STDOUT)
-        # subprocess.check_output(self.udp_egress_rules, shell=True, stderr=subprocess.STDOUT)
+        subprocess.check_output(self.udp_ingress_rules, shell=True, stderr=subprocess.STDOUT)
+        subprocess.check_output(self.udp_egress_rules, shell=True, stderr=subprocess.STDOUT)
 
     def clean_iptables(self):
         subprocess.check_output("iptables -F", shell=True, stderr=subprocess.STDOUT)
