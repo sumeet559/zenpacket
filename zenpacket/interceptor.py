@@ -1,5 +1,6 @@
 import platform
 import subprocess
+import zenpacket.banner
 
 
 class Interceptor(object):
@@ -124,7 +125,8 @@ class Interceptor(object):
             nfqueue.bind(1, self.linux_modify)
             try:
                 self.set_iptables_rules()
-                print("[*]1 Waiting for packets...\n\n(Press Ctrl-C to exit)\n")
+                print(banner.get_banner())
+                print("[*] Waiting for packets...\n\n(Press Ctrl-C to exit)\n")
                 nfqueue.run()
             except KeyboardInterrupt:
                 self.clean_iptables()
