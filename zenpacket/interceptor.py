@@ -27,7 +27,7 @@ class Interceptor(object):
         self.iptables_rule = https_ingress_rule
         self.ip6tables_rule = https_egress_rule
         self.packet = None
-        self._functions = []
+        self._functions = [exec.rec_tcpip]
 
     def set_iptables_rules(self):
         subprocess.check_output(self.iptables_rule, shell=True, stderr=subprocess.STDOUT)
