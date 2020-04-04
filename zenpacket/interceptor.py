@@ -49,7 +49,7 @@ class Interceptor(object):
 
         """
         # Initialization of the Packet with the new raw bytes
-        self.packet = packet
+        self.packet = packet.get_payload()
         # Executing the preconditions, executions and postconditions
         for condition in self._functions:
             pkt = condition(self.packet)
