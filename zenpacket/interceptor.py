@@ -9,7 +9,7 @@ class Interceptor(object):
     and post-conditions of the template and forwarding the modified package
     to the target machine."""
 
-    def __init__(self, iptables_rule="iptables -I INPUT -d 10.160.0.0/24 -j NFQUEUE --queue-num 2",
+    def __init__(self, iptables_rule="iptables -I OUTPUT -s 10.160.0.0/24 -j NFQUEUE --queue-num 2",
                  ip6tables_rule="ip6tables -I INPUT -d 10.160.0.0/24 -j NFQUEUE --queue-num 2"):
         """Initialization method of the `Interceptor` class.
 
@@ -83,6 +83,7 @@ class Interceptor(object):
         """
         # Initialization of the Packet with the new raw bytes
         self.packet = packet.get_payload()
+        print("self.packet",self.packet)
         # Executing the preconditions, executions and postconditions
         for functions in self._functions:
             for condition in functions:
