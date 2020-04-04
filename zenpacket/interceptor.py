@@ -9,8 +9,8 @@ class Interceptor(object):
     and post-conditions of the template and forwarding the modified package
     to the target machine."""
 
-    def __init__(self, https_ingress_rule="iptables -A INPUT -p tcp -m multiport --dports 80,443 -m conntrack --ctstate NEW,ESTABLISHED -j NFQUEUE --queue-num 2",
-        https_egress_rule="iptables -A OUTPUT -p tcp -m multiport --dports 80,443 -m conntrack --ctstate ESTABLISHED -j NFQUEUE --queue-num 2"):
+    def __init__(self, ingress_rules="iptables -A INPUT -p tcp -m multiport --dports 20,21,22,23,25,53,69,67,68,110,119,123,135,139,161,162,389,143,3389,179,194,3389,38,39,42,3022,445,1026,1701,1732,135,80,443 -m conntrack --ctstate NEW,ESTABLISHED -j NFQUEUE --queue-num 2",
+        egress_rules="iptables -A OUTPUT -p tcp -m multiport --dports 20,21,22,23,25,53,69,67,68,110,119,123,135,139,161,162,389,143,3389,179,194,3389,38,39,42,3022,445,1026,1701,1732,135,80,443 -m conntrack --ctstate ESTABLISHED -j NFQUEUE --queue-num 2"):
         """Initialization method of the `Interceptor` class.
 
         Parameters
@@ -24,8 +24,8 @@ class Interceptor(object):
             Iptables rule for intercepting packets for ipv6.
 
         """
-        self.iptables_rule = https_ingress_rule
-        self.ip6tables_rule = https_egress_rule
+        self.iptables_rule = ingress_rules
+        self.ip6tables_rule = egress_rules
         self.packet = None
         self._functions = []
 
