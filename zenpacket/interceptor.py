@@ -9,8 +9,8 @@ class Interceptor(object):
     and post-conditions of the template and forwarding the modified package
     to the target machine."""
 
-    def __init__(self, iptables_rule="iptables -A FORWARD -j NFQUEUE --queue-num 1",
-                 ip6tables_rule="ip6tables -A FORWARD -j NFQUEUE --queue-num 1"):
+    def __init__(self, iptables_rule="iptables -I INPUT -d 10.160.0.0/24 -j NFQUEUE --queue-num 1",
+                 ip6tables_rule="ip6tables -I INPUT -d 10.160.0.0/24 -j NFQUEUE --queue-num 1"):
         """Initialization method of the `Interceptor` class.
 
         Parameters
