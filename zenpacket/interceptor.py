@@ -31,7 +31,7 @@ class Interceptor(object):
 
     def set_iptables_rules(self):
         subprocess.check_output(self.iptables_rule, shell=True, stderr=subprocess.STDOUT)
-        #subprocess.check_output(self.ip6tables_rule, shell=True, stderr=subprocess.STDOUT)
+        subprocess.check_output(self.ip6tables_rule, shell=True, stderr=subprocess.STDOUT)
 
     def clean_iptables(self):
         subprocess.check_output("iptables -F", shell=True, stderr=subprocess.STDOUT)
