@@ -6,3 +6,5 @@ def rec_tcpip(packet):
         pkt.show2()
         packet.set_payload(bytes(pkt))
         return packet
+    else:
+        return None
