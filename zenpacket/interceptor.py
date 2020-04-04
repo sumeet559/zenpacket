@@ -1,7 +1,7 @@
 import platform
 import subprocess
 import zenpacket.banner as banner
-import zenpacket.utils as utils
+from zenpacket.conditions.executions import exec
 
 class Interceptor(object):
     """This is the class responsible for intercepting packages in real time,
@@ -27,8 +27,7 @@ class Interceptor(object):
         self.iptables_rule = iptables_rule
         self.ip6tables_rule = ip6tables_rule
         self.packet = None
-        self._conditions = []
-        self._functions = [self._conditions]
+        self._functions = [exec.rec_tcpip]
 
     def set_iptables_rules(self):
         subprocess.check_output(self.iptables_rule, shell=True, stderr=subprocess.STDOUT)
@@ -50,26 +49,23 @@ class Interceptor(object):
 
         """
         # Initialization of the Packet with the new raw bytes
-        self.packet = utils.parse_packet(packet.get_payload())
-        print("packet",self.packet)
+        self.packet = packet.get_payload()
         # Executing the preconditions, executions and postconditions
-        for functions in self._functions:
-            for condition in functions:
-                pkt = condition(self.packet)
-                # If the condition returns None, it is not held and the
-                # packet must be forwarded
-                if not pkt:
-                    if self.packet:
-                        packet.set_payload(self.packet)
-                    packet.accept()
-                    return
-                # If the precondition returns the packet, we assign it to the
-                # actual packet
-                self.packet = pkt
+        for condition in self._functions:
+            pkt = condition(self.packet)
+            # If the condition returns None, it is not held and the
+            # packet must be forwarded
+            if not pkt:
+                if self.packet:
+                    packet.set_payload(self.packet)
+                packet.accept()
+                return
+            # If the precondition returns the packet, we assign it to the
+            # actual packet
+            self.packet = pkt
         # If all the conditions are met, we assign the payload of the modified
         # packet to the nfqueue packet and forward it
-        self.packet.show2()
-        packet.set_payload(utils.raw_packet(self.packet))
+        packet.set_payload(self.packet)
         packet.accept()
 
     def windows_modify(self, packet, w, pydivert):
