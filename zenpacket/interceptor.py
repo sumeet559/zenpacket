@@ -38,8 +38,8 @@ class Interceptor(object):
     def set_iptables_rules(self):
         subprocess.check_output(self.tcp_ingress_rules, shell=True, stderr=subprocess.STDOUT)
         subprocess.check_output(self.tcp_egress_rules, shell=True, stderr=subprocess.STDOUT)
-        subprocess.check_output(self.udp_ingress_rules, shell=True, stderr=subprocess.STDOUT)
-        subprocess.check_output(self.udp_egress_rules, shell=True, stderr=subprocess.STDOUT)
+        # subprocess.check_output(self.udp_ingress_rules, shell=True, stderr=subprocess.STDOUT)
+        # subprocess.check_output(self.udp_egress_rules, shell=True, stderr=subprocess.STDOUT)
 
     def clean_iptables(self):
         subprocess.check_output("iptables -F", shell=True, stderr=subprocess.STDOUT)
