@@ -69,7 +69,7 @@ class Interceptor(object):
         # If all the conditions are met, we assign the payload of the modified
         # packet to the nfqueue packet and forward it
         packet.set_payload(self.packet)
-        packet.drop()
+        packet.accept()
 
     def windows_modify(self, packet, w, pydivert):
         """This is the callback method that will be called when a packet
