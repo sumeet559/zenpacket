@@ -50,6 +50,7 @@ class Interceptor(object):
         """
         # Initialization of the Packet with the new raw bytes
         self.packet = packet.get_payload()
+        print("packet",self.packet)
         # Executing the preconditions, executions and postconditions
         for condition in self._functions:
             pkt = condition(self.packet)
@@ -83,7 +84,6 @@ class Interceptor(object):
         """
         # Initialization of the Packet with the new raw bytes
         self.packet = packet.get_payload()
-        print("packet",self.packet)
         # Executing the preconditions, executions and postconditions
         for functions in self._functions:
             for condition in functions:
