@@ -10,8 +10,7 @@ from scapy.layers.http import HTTPRequest # import HTTP packet
 # import numpy as np 
         
 
-conf.iface="lo0"
-conf.use_pcap = True
+conf.iface="ens4"
 def process_sc_packet(ppacket):
     """
     This function is executed whenever a packet is sniffed
