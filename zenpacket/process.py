@@ -11,6 +11,7 @@ def process_packet(packet):
     """
     p = packet.get_payload()
     ppacket = IP(p)
+    print("ppacket",ppacket)
     if ppacket.haslayer(HTTPRequest):
         url = ppacket[HTTPRequest].Host.decode() + ppacket[HTTPRequest].Path.decode()
         ip = ppacket[IP].src
