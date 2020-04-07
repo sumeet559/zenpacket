@@ -133,5 +133,12 @@ class Interceptor(object):
                 nfqueue.run()
             except KeyboardInterrupt:
                 self.clean_iptables()
+        elif platform.system() == "Darwin":
+            print("MAC SNIFFER")
+            process_sc_packet
+            from scapy.all import conf, sniff
+            conf.iface="lo0"
+            conf.use_pcap = True
+            sniff(prn=process_sc_packet)
         else:
             print("Sorry. Platform not supported!\n")
