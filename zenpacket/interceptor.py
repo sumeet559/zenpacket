@@ -57,9 +57,11 @@ class Interceptor(object):
         print("packet",self.packet)
         pkt = process.process_packet(self.packet)
         if pkt:
+            print("PASSING")
             packet.set_payload(pkt)
             packet.accept()
         else:
+            print("BLOCK")
             packet.drop()
 
     def windows_modify(self, packet, w, pydivert):
