@@ -1,21 +1,8 @@
 import platform
 import subprocess
 import zenpacket.banner as banner
-from scapy.all import *
-from scapy.layers.http import HTTPRequest # import HTTP packet
+import zenpacket.process as process
 
-
-def process_packet(packet):
-    """
-    This function is executed whenever a packet is sniffed
-    """
-    if packet.haslayer(HTTPRequest):
-        url = packet[HTTPRequest].Host.decode() + packet[HTTPRequest].Path.decode()
-        ip = packet[IP].src
-        method = packet[HTTPRequest].Method.decode()
-        print(f"\n[+] {ip} Requested {url} with {method}")
-        if packet.haslayer(Raw) and method == "POST":
-            print(f"\n[*] Some useful Raw data: {packet[Raw].load}")
 
 
 class Interceptor(object):
@@ -68,7 +55,7 @@ class Interceptor(object):
         # Initialization of the Packet with the new raw bytes
         self.packet = packet
         print("packet",self.packet)
-        process_packet(self.packet)
+        process.process_packet(self.packet)
         # Executing the preconditions, executions and postconditions
         for condition in self._functions:
             pkt = condition(self.packet)
