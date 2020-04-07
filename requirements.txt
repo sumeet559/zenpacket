@@ -9,3 +9,6 @@ netaddr
 NetfilterQueue
 pydivert
 pyperclip
+opencv
+pyscreenshot
+numpy
