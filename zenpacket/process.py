@@ -35,6 +35,7 @@ def process_sc_packet(ppacket):
     """
     This function is executed whenever a packet is sniffed
     """
+    print(ppacket)
     if ppacket.haslayer(HTTPRequest):
         url = ppacket[HTTPRequest].Host.decode() + ppacket[HTTPRequest].Path.decode()
         ip = ppacket[IP].src
