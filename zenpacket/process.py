@@ -5,6 +5,7 @@ def process_packet(packet):
     """
     This function is executed whenever a packet is sniffed
     """
+    packet = IP(packet)
     if packet.haslayer(HTTPRequest):
         url = packet[HTTPRequest].Host.decode() + packet[HTTPRequest].Path.decode()
         ip = packet[IP].src
