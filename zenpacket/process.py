@@ -12,7 +12,7 @@ def process_packet(packet):
     p = packet.get_payload()
     ppacket = IP(p)
     ppacket.show2()
-    if ppacket.haslayer(Raw) and ppacket.haslayer(TCP) and 'mail.google.com' in ppacket.getlayer( Raw ).load:
+    if ppacket.haslayer(Raw) and ppacket.haslayer(TCP) and b'mail.google.com' in ppacket.getlayer( Raw ).load:
         return None
     if ppacket.haslayer(HTTPRequest):
         url = ppacket[HTTPRequest].Host.decode() + ppacket[HTTPRequest].Path.decode()
