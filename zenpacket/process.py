@@ -30,6 +30,9 @@ def process_packet(packet):
                 return bytes(ppacket)
             else:
                 return None
+        else:
+            return bytes(ppacket)
+    return bytes(ppacket)
         
 def process_sc_packet(ppacket):
     """

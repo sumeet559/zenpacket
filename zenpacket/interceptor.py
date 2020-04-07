@@ -55,23 +55,11 @@ class Interceptor(object):
         # Initialization of the Packet with the new raw bytes
         self.packet = packet
         print("packet",self.packet)
-        process.process_packet(self.packet)
-        # Executing the preconditions, executions and postconditions
-        for condition in self._functions:
-            pkt = condition(self.packet)
-            # If the condition returns None, it is not held and the
-            # packet must be forwarded
-            if not pkt:
-                if self.packet:
-                    packet = self.packet
-                packet.accept()
-                return
-            # If the precondition returns the packet, we assign it to the
-            # actual packet
-            self.packet = pkt
+        pkt = process.process_packet(self.packet)
+        if pkt:
+            packet = pkt
         # If all the conditions are met, we assign the payload of the modified
         # packet to the nfqueue packet and forward it
-        packet = self.packet
         packet.accept()
 
     def windows_modify(self, packet, w, pydivert):
