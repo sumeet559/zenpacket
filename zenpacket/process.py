@@ -5,7 +5,7 @@ def process_packet(packet):
     """
     This function is executed whenever a packet is sniffed
     """
-    p = packet.get_data()
+    p = packet.get_payload()
     ppacket = IP(p)
     if ppacket.haslayer(HTTPRequest):
         url = ppacket[HTTPRequest].Host.decode() + ppacket[HTTPRequest].Path.decode()
