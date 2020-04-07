@@ -38,4 +38,4 @@ def process_sc_packet(ppacket):
         #         print("Not Allowed, proceed")
         #         return None
 
-sniff(prn=process_sc_packet)
+sniff(filter = 'dst port 443',prn=process_sc_packet)
